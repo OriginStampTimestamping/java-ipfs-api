@@ -11,9 +11,11 @@ public class Multipart {
     private HttpURLConnection httpConn;
     private String charset;
     private OutputStream out;
+    private Map<String, String> headers;
 
-    public Multipart(String requestURL, String charset) {
+    public Multipart(String requestURL, String charset, Map<String, String> headers) {
         this.charset = charset;
+        this.headers = headers;
 
         boundary = createBoundary();
 
@@ -26,6 +28,7 @@ public class Multipart {
             httpConn.setRequestProperty("Expect", "100-continue");
             httpConn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
             httpConn.setRequestProperty("User-Agent", "Java IPFS CLient");
+            IPFS.addHeaders(httpConn, headers);
             out = httpConn.getOutputStream();
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -36,11 +39,11 @@ public class Multipart {
         Random r = new Random();
         String allowed = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         StringBuilder b = new StringBuilder();
-        for (int i=0; i < 32; i++)
+        for (int i = 0; i < 32; i++)
             b.append(allowed.charAt(r.nextInt(allowed.length())));
         return b.toString();
     }
-    
+
     private Multipart append(String value) throws IOException {
         out.write(value.getBytes(charset));
         return this;
@@ -59,7 +62,7 @@ public class Multipart {
     public void addSubtree(Path parentPath, NamedStreamable dir) throws IOException {
         Path dirPath = parentPath.resolve(dir.getName().get());
         addDirectoryPart(dirPath);
-        for (NamedStreamable f: dir.getChildren()) {
+        for (NamedStreamable f : dir.getChildren()) {
             if (f.isDirectory())
                 addSubtree(dirPath, f);
             else
@@ -86,7 +89,7 @@ public class Multipart {
     }
 
     public void addFilePart(String fieldName, Path parent, NamedStreamable uploadFile) throws IOException {
-        Optional<String> fileName = uploadFile.getName().map(n -> encode(parent.resolve(n).toString().replace('\\','/')));
+        Optional<String> fileName = uploadFile.getName().map(n -> encode(parent.resolve(n).toString().replace('\\', '/')));
         append("--").append(boundary).append(LINE_FEED);
         if (!fileName.isPresent())
             append("Content-Disposition: file; name=\"").append(fieldName).append("\";").append(LINE_FEED);
