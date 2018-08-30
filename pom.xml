@@ -5,7 +5,10 @@
     <groupId>com.github.ipfs</groupId>
     <artifactId>java-ipfs-api</artifactId>
 	<version>v1.2.2-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<modules>
+		<module>lel</module>
+	</modules>
+	<packaging>pom</packaging>
 
 	<name>java-ipfs-api</name>
 	<url>https://github.com/ipfs/java-ipfs-api</url>
@@ -60,29 +63,21 @@
 			<groupId>com.github.multiformats</groupId>
 			<artifactId>java-multiaddr</artifactId>
 			<version>v1.3.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/multiaddr.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.github.multiformats</groupId>
 			<artifactId>java-multihash</artifactId>
 			<version>v1.2.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/multihash.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.github.multiformats</groupId>
 			<artifactId>java-multibase</artifactId>
 			<version>v1.0.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/multibase.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.github.ipld</groupId>
 			<artifactId>java-cid</artifactId>
 			<version>v1.1.1</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/cid.jar</systemPath>
 		</dependency>
 	</dependencies>
 

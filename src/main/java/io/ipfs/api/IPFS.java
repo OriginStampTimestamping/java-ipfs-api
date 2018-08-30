@@ -73,13 +73,13 @@ public class IPFS {
 
         this.version = version;
         // Check IPFS is sufficiently recent
-        try {
+    /*    try {
             Version detected = Version.parse(version());
             if (detected.isBefore(MIN_VERSION))
                 throw new IllegalStateException("You need to use a more recent version of IPFS! >= " + MIN_VERSION);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        } */
     }
 
     public List<MerkleNode> add(NamedStreamable file) throws IOException {
@@ -749,6 +749,12 @@ public class IPFS {
         return readFully(in);
     }
 
+    /**
+     * Adds customized headers to the requests. This can be used for Authentication. Note that you should not overwrite existing headers.
+     *
+     * @param conn
+     * @param headers
+     */
     public static void addHeaders(HttpURLConnection conn, Map<String, String> headers) {
         // add headers
         for (Map.Entry<String, String> header : headers.entrySet()) {
