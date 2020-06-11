@@ -1,0 +1,44 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+name: Maven Build and Deploy
+
+# Trigger conditions (build only on pull_request for features and for a release)
+on:
+  release:
+    types:
+      - published
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8 and GitHub Packages Repo
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+          server-id: com.originstamp # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      # Set a new version depending on source branch and build number (can't overwrite existing versions)
+      - name: Update Maven version (pull request)
+        if: github.event_name == 'pull_request'
+        run: mvn versions:set -X -DnewVersion=${GITHUB_HEAD_REF##*/}.${{ github.run_number }} -s $GITHUB_WORKSPACE/settings.xml
+
+      # Set a new version depending on tag name (can only set a version once!)
+      - name: Update Maven version (release)
+        if: github.event_name == 'release'
+        run: mvn versions:set -DnewVersion=${GITHUB_REF##*/} -s $GITHUB_WORKSPACE/settings.xml
+
+      # Built it!
+      - name: Build with Maven
+        run: mvn -B package -DskipTests=true --file pom.xml -s $GITHUB_WORKSPACE/settings.xml
+
+      # Deploy / Publish to GitHub packages via Apache Maven (with own GitHub Token)
+      - name: Deploy to GitHub Packages
+        run: mvn -e -Dmaven.wagon.http.pool=false -DskipTests=true deploy -s $GITHUB_WORKSPACE/settings.xml
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
