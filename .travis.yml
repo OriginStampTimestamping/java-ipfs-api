@@ -8,4 +8,4 @@ before_script:
   - ipfs init
   - ipfs daemon --enable-pubsub-experiment &
 script:
-  - mvn clean verify
+  - mvn clean verify -DskipTests=true

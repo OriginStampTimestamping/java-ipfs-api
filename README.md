@@ -28,20 +28,21 @@ You can use this project by including `ipfs.jar` from one of the [releases](http
 Package managers are supported through GitHub Packages which supports Maven, Gradle, SBT, etc.
 
 for Maven, add the following sections to your pom.xml (replacing $LATEST_VERSION):
+
 ```
   <repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
+      <repository>
+          <id>com.originstamp</id>
+          <url>https://maven.pkg.github.com/OriginStampTimestamping/java-ipfs-api</url>
+      </repository>
   </repositories>
 
   <dependencies>
-    <dependency>
-      <groupId>com.github.OriginStampTimestamping</groupId>
-      <artifactId>java-ipfs-api</artifactId>
-      <version>$LATEST_VERSION</version>
-    </dependency>
+      <dependency>
+          <groupId>com.originstamp.ipfs</groupId>
+          <artifactId>java-ipfs-api</artifactId>
+          <version>$LATEST_VERSION</version>
+      </dependency>
   </dependencies>
 ```
 
