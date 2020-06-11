@@ -39,6 +39,6 @@ jobs:
 
       # Deploy / Publish to GitHub packages via Apache Maven (with own GitHub Token)
       - name: Deploy to GitHub Packages
-        run: mvn -e -Dmaven.wagon.http.pool=false deploy -s $GITHUB_WORKSPACE/settings.xml
+        run: mvn -e -Dmaven.wagon.http.pool=false -DskipTests=true deploy -s $GITHUB_WORKSPACE/settings.xml
         env:
           GITHUB_TOKEN: ${{ github.token }}
